@@ -5,8 +5,6 @@ import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 import { connectMongoDB } from "@/lib/mongodb";
 
-
-
 interface SignInParams {
   user: AuthUser;
   account: Account;
@@ -24,13 +22,10 @@ export const authOptions = {
       async authorize(credentials) {
         await connectMongoDB();
         try {
-
-          if(credentials){
-
+          if (credentials) {
             // Check if user exists
             const user = await User.findOne({ email: credentials.email });
-            if (user && user.password ) {
-  
+            if (user && user.password) {
               // Check if password is correct
               const isPasswordCorrect = await bcrypt.compare(
                 credentials.password,
@@ -45,8 +40,10 @@ export const authOptions = {
               throw new Error("User doesn't exist");
             }
           }
-        } catch (err:any) {
-          throw new Error(err);
+        } catch (err: unknown) {
+          if (err instanceof Error) {
+            throw new Error(err.message);
+          }
         }
       },
     }),
@@ -54,12 +51,12 @@ export const authOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-      allowDangerousEmailAccountLinking: true, 
+      allowDangerousEmailAccountLinking: true,
     }),
   ],
 
   callbacks: {
-    async signIn({ user, account }:SignInParams) {
+    async signIn({ user, account }: SignInParams) {
       if (account?.provider == "credentials") {
         return true;
       }
@@ -67,7 +64,6 @@ export const authOptions = {
       if (account?.provider == "google") {
         await connectMongoDB();
         try {
-
           const existingUser = await User.findOne({ email: user.email });
           // If user does not exist : New user
           if (!existingUser) {
@@ -85,5 +81,9 @@ export const authOptions = {
         }
       }
     },
+  },
+
+  session: {
+    strategy: "jwt",
   },
 };

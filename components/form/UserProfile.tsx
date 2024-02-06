@@ -1,19 +1,21 @@
 "use client";
 
+import Image from "next/image";
 import { ChangeEvent, useRef, useState } from "react";
 
 const UserProfile = () => {
   const [image, setImage] = useState<string | null>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
-  localStorage.setItem("img", image);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
+      reader.onload = () => {
         setImage(reader.result as string);
       };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -35,11 +37,13 @@ const UserProfile = () => {
         hidden
       />
       {image ? (
-        <img
+        <Image
           className="inline-block h-[50px] w-[50px] rounded-full ring-2 ring-white"
           src={image}
           onClick={handleImageClick}
           alt=""
+          width={50}
+          height={50}
         />
       ) : (
         <div

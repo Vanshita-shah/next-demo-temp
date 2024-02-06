@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { zfd } from "zod-form-data";
+import { base64Converter, logger } from "./fileReader";
 
 const registerSchema = zfd.formData({
   name: zfd.text(z.string().min(2, "Too short").max(20, "Too long")),
@@ -10,13 +11,6 @@ const registerSchema = zfd.formData({
     z.string().min(8, "Password must be at least 8 characters")
   ),
 });
-
-// const loginSchema = zfd.formData({
-//   email: zfd.text(z.string().email("Invalid email format")),
-//   password: zfd.text(
-//     z.string().min(8, "Password must be at least 8 characters")
-//   ),
-// });
 
 export const registerAction = async (
   prevState: object | { message: string },
@@ -45,17 +39,26 @@ export const registerAction = async (
     return formattedErrors;
   }
 
-  const profilepic = formData.get("profile");
+  const profilepic = formData.get("profile") as File;
 
-  // const img = URL.createObjectURL(profilepic);
-  // localStorage.setItem("img", img);
-  // console.log(img);
+  const imageReader = profilepic.stream().getReader();
+  const imageDataU8: number[] = [];
 
-  // console.log(img);
+  while (true) {
+    const { done, value } = await imageReader.read();
+    if (done) break;
+
+    imageDataU8.push(...value);
+  }
+
+  const imageBinary = Buffer.from(imageDataU8, "binary");
+  console.log(imageBinary.toString());
+
   const body = {
     name: formData.get("name"),
     email: formData.get("email"),
     password: formData.get("password"),
+    image: imageBinary.toString(),
   };
   console.log(body);
 
@@ -107,4 +110,4 @@ export const registerAction = async (
 //   console.log(body);
 
 //   return { message: "" };
-// };
+// }

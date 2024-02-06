@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
 import { getServerSession } from "next-auth";
 import AuthProvider from "./utils/SessionProvider";
+import Navbar2 from "@/components/navbar/Navbar2";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,8 +26,9 @@ export default async function RootLayout({
       <body className={inter.className}>
         {/* Session provider  */}
         <AuthProvider session={session}>
-          <Navbar />
-          {children}
+          {/* <Navbar /> */}
+          <Navbar2 />
+          <div className="py-[4rem]">{children}</div>
         </AuthProvider>
       </body>
     </html>

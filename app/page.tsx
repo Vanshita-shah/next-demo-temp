@@ -5,7 +5,6 @@ import React from "react";
 
 const page = async () => {
   const session = await getServerSession();
-  
 
   //Redirect Authenticated user to dashboard page
   if (session) {

@@ -1,4 +1,4 @@
-// File: E:\Simform\next-temp\app\layout.tsx
+// File: /home/vanshita/Desktop/Learnings-simform/Goals/NextJS/auth/demo-home/next-demo-temp/app/layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

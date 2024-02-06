@@ -1,11 +1,10 @@
 "use client";
+import Image from "next/image";
 import React from "react";
 import { useFormStatus } from "react-dom";
 
 const Button = ({ text }: { text: string }) => {
   const { pending } = useFormStatus();
-  const imageDataUrl = localStorage.getItem("img");
-  console.log("helllloooasdhsadjhasd", imageDataUrl);
 
   return (
     <>
@@ -15,11 +14,6 @@ const Button = ({ text }: { text: string }) => {
       >
         {text}
       </button>
-      <img
-        className="inline-block h-[50px] w-[50px] rounded-full ring-2 ring-white"
-        src={imageDataUrl}
-        alt=""
-      />
     </>
   );
 };

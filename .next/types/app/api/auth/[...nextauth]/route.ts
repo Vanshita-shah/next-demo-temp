@@ -1,4 +1,4 @@
-// File: E:\Simform\next-temp\app\api\auth\[...nextauth]\route.ts
+// File: /home/vanshita/Desktop/Learnings-simform/Goals/NextJS/auth/demo-home/next-demo-temp/app/api/auth/[...nextauth]/route.ts
 import * as entry from '../../../../../../app/api/auth/[...nextauth]/route.js'
 import type { NextRequest } from 'next/server.js'
 
